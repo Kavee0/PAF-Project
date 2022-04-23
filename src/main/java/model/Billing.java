@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class Billing {
 
-	//A common method to connect to the DB
+	// connect to the DB
 	private Connection connect()
 	 {
 	 Connection con = null;
@@ -33,6 +33,7 @@ public class Billing {
 	 (`billingID`,`billingCode`,`billingName`,`billingUnits`,`billingNumberOfDays`,`billingStartDate`,`billingEndDate`,`billingUsageCharge`,`billingFixedCharge`,`billingTotalCharge`)"
 	 + " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	 PreparedStatement preparedStmt = con.prepareStatement(query);
+	 
 	 // binding values
 	 preparedStmt.setInt(1, 0);
 	 preparedStmt.setString(2, code);
@@ -121,6 +122,46 @@ public class Billing {
 	 }
 	 return output;
 	 } 
+	
+	//update
+		public String updateBilling(String ID, String code, String name,  String units, String numberofdays, String startdate, String enddate, String usagecharge, String fixedcharge, String totalcharge)
+		
+		{
+			 String output = "";
+			 try
+			 {
+			 Connection con = connect();
+			 if (con == null)
+			 {return "Error while connecting to the database for updating."; }
+			 
+			 // create a prepared statement
+			 String query = "UPDATE billings SET billingCode=?,billingName=?,billingUnits=?,billingNumberOfDays=?,billingStartDate=?,billingEndDate=?
+			 WHERE billingID=?";
+			 PreparedStatement preparedStmt = con.prepareStatement(query);
+			 
+			 // binding values
+			 preparedStmt.setString(1, code);
+			 preparedStmt.setString(2, name);
+			 preparedStmt.setString(4, units);
+			 preparedStmt.setString(5, numberofdays);
+			 preparedStmt.setString(6, startdate);
+			 preparedStmt.setString(7, enddate);
+			 preparedStmt.setInt(8, Integer.parseInt(ID));
+			 
+			 // execute the statement
+			 preparedStmt.execute();
+			 con.close();
+			 output = "Updated successfully";
+			 }
+			 catch (Exception e)
+			 {
+			 output = "Error while updating the billing.";
+			 System.err.println(e.getMessage());
+			 }
+			 return output;
+			 }
+		
+		
 	
 	
 }
