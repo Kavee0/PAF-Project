@@ -19,7 +19,7 @@ public class Billing {
 	 {e.printStackTrace();}
 	 return con;
 	 }
-	public String insertBilling(String code, String name, String units, String numberofdays, String startdate, String enddate, String usagecharge, String fixedcharge, String totalcharge)
+	public String insertBilling(String accountnumber, String name, String units, String date)
 	 {
 	 String output = "";
 	 try
@@ -30,21 +30,16 @@ public class Billing {
 	 
 	 // create a prepared statement
 	 String query = " insert into billings
-	 (`billingID`,`billingCode`,`billingName`,`billingUnits`,`billingNumberOfDays`,`billingStartDate`,`billingEndDate`,`billingUsageCharge`,`billingFixedCharge`,`billingTotalCharge`)"
-	 + " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	 (`billingID`,`billingAccountNumber`,`billingName`,`billingUnits`,`billingDate`)"
+	 + " values (?, ?, ?, ?, ?)";
 	 PreparedStatement preparedStmt = con.prepareStatement(query);
 	 
 	 // binding values
 	 preparedStmt.setInt(1, 0);
-	 preparedStmt.setString(2, code);
+	 preparedStmt.setString(2, accountnumber);
 	 preparedStmt.setString(3, name);
 	 preparedStmt.setString(4, units);
-	 preparedStmt.setString(5, numberofdays);
-	 preparedStmt.setString(6, startdate);
-	 preparedStmt.setString(7, enddate);
-	 preparedStmt.setDouble(8, Double.parseDouble(usagecharge));
-	 preparedStmt.setDouble(9, Double.parseDouble(fixedcharge));
-	 preparedStmt.setDouble(10, Double.parseDouble(totalcharge));
+	 preparedStmt.setString(5, date);
 	 
 	 // execute the statement
 	 preparedStmt.execute();
@@ -68,8 +63,8 @@ public class Billing {
 	 {return "Error while connecting to the database for reading."; }
 	 
 	 // Prepare the html table to be displayed
-	 output = "<table border='1'><tr><th>Billing Code</th><th>Billing Name</th>" +
-	 "<th>Billing Units</th>" +"<th>Billing NumberOfDays</th>" +"<th>Billing StartDate</th>" +"<th>Billing EndDate</th>" +"<th>Billing UsageCharge</th>" +"<th>Billing FixedCharge</th>" +"<th>Billing TotalCharge</th>" +
+	 output = "<table border='1'><tr><th>Billing AccountNumber</th><th>Billing Name</th>" +
+	 "<th>Billing Units</th>" +"<th>Billing Date</th>" +"<th>Billing StartDate</th>" +
 	 "<th>Update</th><th>Remove</th></tr>";
 
 	 String query = "select * from billing";
@@ -80,26 +75,16 @@ public class Billing {
 	 while (rs.next())
 	 {
 	 String billingID = Integer.toString(rs.getInt("billingID"));
-	 String billingCode = rs.getString("billingCode");
+	 String billingAccountNumber = rs.getString("billingAccountNumber");
 	 String billingName = rs.getString("billingName");
 	 String billingUnits = rs.getString("billingUnits");
-	 String billingNumberOfDays = rs.getString("billingNumberOfDays");
-	 String billingStartDate = rs.getString("billingStartDate");
-	 String billingEndDate = rs.getString("billingEndDate");
-	 String billingPrice = Double.toString(rs.getDouble("billingUsageCharge"));
-	 String billingPrice = Double.toString(rs.getDouble("billingFixedCharge"));
-	 String billingPrice = Double.toString(rs.getDouble("billingTotalCharge"));
+	 String billingDate = rs.getString("billingDate");
 	 
 	 // Add into the html table
-	 output += "<tr><td>" + billingCode + "</td>";
+	 output += "<tr><td>" + billingAccountNumber + "</td>";
 	 output += "<td>" + billingName + "</td>";
 	 output += "<td>" + billingUnits + "</td>";
-	 output += "<td>" + billingNumberOfDays + "</td>";
-	 output += "<td>" + billingStartDate + "</td>";
-	 output += "<td>" + billingEndDate + "</td>";
-	 output += "<td>" + billingUsageCharge + "</td>";
-	 output += "<td>" + billingFixedCharge + "</td>";
-	 output += "<td>" + billingTotalCharge + "</td>";
+	 output += "<td>" + billingDate + "</td>";
 	 
 	 // buttons
 	 output += "<td><input name='btnUpdate' type='button' value='Update'
@@ -124,7 +109,7 @@ public class Billing {
 	 } 
 	
 	//update
-		public String updateBilling(String ID, String code, String name,  String units, String numberofdays, String startdate, String enddate, String usagecharge, String fixedcharge, String totalcharge)
+		public String updateBilling(String ID, String accountnumber, String name,  String units, String date)
 		
 		{
 			 String output = "";
@@ -135,18 +120,16 @@ public class Billing {
 			 {return "Error while connecting to the database for updating."; }
 			 
 			 // create a prepared statement
-			 String query = "UPDATE billings SET billingCode=?,billingName=?,billingUnits=?,billingNumberOfDays=?,billingStartDate=?,billingEndDate=?
+			 String query = "UPDATE billings SET billingAccountNumber=?,billingName=?,billingUnits=?,billingDate=?
 			 WHERE billingID=?";
 			 PreparedStatement preparedStmt = con.prepareStatement(query);
 			 
 			 // binding values
-			 preparedStmt.setString(1, code);
+			 preparedStmt.setString(1, accountnumber);
 			 preparedStmt.setString(2, name);
 			 preparedStmt.setString(4, units);
-			 preparedStmt.setString(5, numberofdays);
-			 preparedStmt.setString(6, startdate);
-			 preparedStmt.setString(7, enddate);
-			 preparedStmt.setInt(8, Integer.parseInt(ID));
+			 preparedStmt.setString(5, date);
+			 preparedStmt.setInt(6, Integer.parseInt(ID));
 			 
 			 // execute the statement
 			 preparedStmt.execute();
