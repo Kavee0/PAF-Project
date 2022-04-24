@@ -19,7 +19,7 @@ public class Billing {
 	 {e.printStackTrace();}
 	 return con;
 	 }
-	public String insertBilling(String accountnumber, String name, String units, String date)
+	public String insertBilling(String accountnumber, String name, String units)
 	 {
 	 String output = "";
 	 try
@@ -30,8 +30,8 @@ public class Billing {
 	 
 	 // create a prepared statement
 	 String query = " insert into billings
-	 (`billingID`,`billingAccountNumber`,`billingName`,`billingUnits`,`billingDate`)"
-	 + " values (?, ?, ?, ?, ?)";
+	 (`billingID`,`billingAccountNumber`,`billingName`,`billingUnits`)"
+	 + " values (?, ?, ?, ?)";
 	 PreparedStatement preparedStmt = con.prepareStatement(query);
 	 
 	 // binding values
@@ -39,12 +39,11 @@ public class Billing {
 	 preparedStmt.setString(2, accountnumber);
 	 preparedStmt.setString(3, name);
 	 preparedStmt.setString(4, units);
-	 preparedStmt.setString(5, date);
 	 
 	 // execute the statement
 	 preparedStmt.execute();
 	 con.close();
-	 output = "Inserted successfully";
+	 output = "Added Successfully";
 	 }
 	 catch (Exception e)
 	 {
@@ -64,7 +63,7 @@ public class Billing {
 	 
 	 // Prepare the html table to be displayed
 	 output = "<table border='1'><tr><th>Billing AccountNumber</th><th>Billing Name</th>" +
-	 "<th>Billing Units</th>" +"<th>Billing Date</th>" +"<th>Billing StartDate</th>" +
+	 "<th>Billing Units</th>" +
 	 "<th>Update</th><th>Remove</th></tr>";
 
 	 String query = "select * from billing";
@@ -78,13 +77,11 @@ public class Billing {
 	 String billingAccountNumber = rs.getString("billingAccountNumber");
 	 String billingName = rs.getString("billingName");
 	 String billingUnits = rs.getString("billingUnits");
-	 String billingDate = rs.getString("billingDate");
 	 
 	 // Add into the html table
 	 output += "<tr><td>" + billingAccountNumber + "</td>";
 	 output += "<td>" + billingName + "</td>";
 	 output += "<td>" + billingUnits + "</td>";
-	 output += "<td>" + billingDate + "</td>";
 	 
 	 // buttons
 	 output += "<td><input name='btnUpdate' type='button' value='Update'
@@ -109,7 +106,7 @@ public class Billing {
 	 } 
 	
 	//update
-		public String updateBilling(String ID, String accountnumber, String name,  String units, String date)
+		public String updateBilling(String ID, String accountnumber, String name,  String units)
 		
 		{
 			 String output = "";
@@ -120,7 +117,7 @@ public class Billing {
 			 {return "Error while connecting to the database for updating."; }
 			 
 			 // create a prepared statement
-			 String query = "UPDATE billings SET billingAccountNumber=?,billingName=?,billingUnits=?,billingDate=?
+			 String query = "UPDATE billings SET billingAccountNumber=?,billingName=?,billingUnits=?
 			 WHERE billingID=?";
 			 PreparedStatement preparedStmt = con.prepareStatement(query);
 			 
@@ -128,13 +125,12 @@ public class Billing {
 			 preparedStmt.setString(1, accountnumber);
 			 preparedStmt.setString(2, name);
 			 preparedStmt.setString(4, units);
-			 preparedStmt.setString(5, date);
-			 preparedStmt.setInt(6, Integer.parseInt(ID));
+			 preparedStmt.setInt(5, Integer.parseInt(ID));
 			 
 			 // execute the statement
 			 preparedStmt.execute();
 			 con.close();
-			 output = "Updated successfully";
+			 output = "Updated Successfully";
 			 }
 			 catch (Exception e)
 			 {
